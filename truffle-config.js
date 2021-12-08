@@ -22,6 +22,7 @@
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 const secret = require("./secret.json");
 const secretTestnet = require("./secret.testnet.json");
@@ -50,16 +51,23 @@ module.exports = {
       network_id: "*", // Any network (default: none)
       timeoutBlocks: 400,
     },
+    rinkeby: {
+      provider: () => new HDWalletProvider(secretTestnet.mnemonic, `wss://rinkeby.infura.io/ws/v3/${secretTestnet.infuraKey}`),
+      network_id: 4, // rinkeby's id
+      skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
+      networkCheckTimeout: 999999,
+    },
     testnet: {
       provider: () =>
         new HDWalletProvider(
           secretTestnet.mnemonic,
-          `https://data-seed-prebsc-1-s2.binance.org:8545`
+          `https://data-seed-prebsc-1-s1.binance.org:8545`
         ),
       network_id: 97,
       confirmations: 10,
-      timeoutBlocks: 400,
+      timeoutBlocks: 600,
       skipDryRun: true,
+      networkCheckTimeout: 999999,
     },
     mainnet: {
       provider: () =>
@@ -125,6 +133,15 @@ module.exports = {
       // }
     }
   },
+
+  plugins: [
+    'truffle-plugin-verify'
+  ],
+
+  api_keys: {
+    etherscan: secret.etherscanApiKey,
+    bscscan: secret.bscscanApikey,
+  }
 
   // Truffle DB is currently disabled by default; to enable it, change enabled:
   // false to enabled: true. The default storage location can also be

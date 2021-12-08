@@ -115,14 +115,14 @@ contract FINU is Context, IERC20, Ownable {
     mapping (address => bool) private bots;
     mapping (address => uint) private cooldown;
     uint256 private constant MAX = ~uint256(0);
-    uint256 private constant _tTotal = 1000000000000000000 * 10**9;
+    uint256 private constant _tTotal = 1000000000000000000 * 10**9; // total supply
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
     
-    uint256 private _feeAddr1;
-    uint256 private _feeAddr2;
-    address payable private _feeAddrWallet1;
-    address payable private _feeAddrWallet2;
+    uint256 private _feeAddr1; // reflection fee
+    uint256 private _feeAddr2; // team fee
+    address payable private _feeAddrWallet1; // fee wallet1 address
+    address payable private _feeAddrWallet2; //fee wallet2 address
     
     string private constant _name = "First Inu";
     string private constant _symbol = "FINU";
@@ -229,6 +229,7 @@ contract FINU is Context, IERC20, Ownable {
                 _feeAddr1 = 2;
                 _feeAddr2 = 14;
             }
+
             uint256 contractTokenBalance = balanceOf(address(this));
             if (!inSwap && from != uniswapV2Pair && swapEnabled) {
                 swapTokensForEth(contractTokenBalance);
